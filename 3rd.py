@@ -16,7 +16,7 @@ while capture.isOpened():
 
     hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
-    #binary image with where white will be skin colors
+    
     mask2 = cv2.inRange(hsv, np.array([2, 0, 0]), np.array([20, 255, 255]))
     kernel = np.ones((5, 5))
     #filter out the background noise
@@ -27,21 +27,21 @@ while capture.isOpened():
     ret, thresh = cv2.threshold(filtered, 127, 255, 0)
 
     cv2.imshow("Threshold_win", thresh)
-    # Find contours
+    
     contours, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     try:
-        #find contour with maximum area
+        
         contour = max(contours, key=lambda x: cv2.contourArea(x))
-        # bounded rectangle around the contour
+        
         x, y, w, h = cv2.boundingRect(contour)
         cv2.rectangle(crop_image, (x, y), (x + w, y + h), (0, 0, 255), 0)
-        #for convexHall
+        
         hull = cv2.convexHull(contour)
-        # draw contour
+        
         drawing = np.zeros(crop_image.shape, np.uint8)
         cv2.drawContours(drawing, [contour], -1, (255, 255, 0), 0)
         cv2.drawContours(drawing, [hull], -1, (139, 69, 19), 0)
-        #find convexity defects
+        
         hull = cv2.convexHull(contour, returnPoints=False)
         defects = cv2.convexityDefects(contour, hull)
 
@@ -57,7 +57,7 @@ while capture.isOpened():
             c = math.sqrt((end[0] - far[0]) ** 2 + (end[1] - far[1]) ** 2)
             angle = (math.acos((b ** 2 + c ** 2 - a ** 2) / (2 * b * c)) * 180) / 3.14
 
-            # draw a circle at the far point
+            
             if angle <= 90:
                 count_defects += 1
                 cv2.circle(crop_image, far, 1, [0, 255, 0], -1)
@@ -116,10 +116,10 @@ while capture.isOpened():
 
     hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
-    #binary image with where white will be skin colors
+    
     mask2 = cv2.inRange(hsv, np.array([2, 0, 0]), np.array([20, 255, 255]))
     kernel = np.ones((5, 5))
-    #filter out the background noise
+    
     dilation = cv2.dilate(mask2, kernel, iterations=1)
     erosion = cv2.erode(dilation, kernel, iterations=1)
 
@@ -127,21 +127,21 @@ while capture.isOpened():
     ret, thresh = cv2.threshold(filtered, 127, 255, 0)
 
     cv2.imshow("Threshold_win", thresh)
-    # Find contours
+    
     contours, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     try:
-        #find contour with maximum area
+        
         contour = max(contours, key=lambda x: cv2.contourArea(x))
-        # bounded rectangle around the contour
+        
         x, y, w, h = cv2.boundingRect(contour)
         cv2.rectangle(crop_image, (x, y), (x + w, y + h), (0, 0, 255), 0)
-        #for convexHall
+        
         hull = cv2.convexHull(contour)
-        # draw contour
+        
         drawing = np.zeros(crop_image.shape, np.uint8)
         cv2.drawContours(drawing, [contour], -1, (255, 255, 0), 0)
         cv2.drawContours(drawing, [hull], -1, (139, 69, 19), 0)
-        #find convexity defects
+        
         hull = cv2.convexHull(contour, returnPoints=False)
         defects = cv2.convexityDefects(contour, hull)
 
